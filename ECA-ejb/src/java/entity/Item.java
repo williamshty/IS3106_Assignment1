@@ -33,7 +33,8 @@ public class Item implements Serializable {
     private long quantity;
     @ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.EAGER)
     private ArrayList<Cart> carts;
-    
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    private ArrayList<Order> orders;
     public Long getId() {
         return id;
     }
@@ -149,6 +150,20 @@ public class Item implements Serializable {
      */
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    /**
+     * @return the orders
+     */
+    public ArrayList<Order> getOrders() {
+        return orders;
+    }
+
+    /**
+     * @param orders the orders to set
+     */
+    public void setOrders(ArrayList<Order> orders) {
+        this.orders = orders;
     }
 
 }

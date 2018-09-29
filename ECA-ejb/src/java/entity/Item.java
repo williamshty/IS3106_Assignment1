@@ -6,10 +6,14 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 /**
  *
@@ -22,9 +26,14 @@ public class Item implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private String name;
+    private String description;
+    private String category;
     private float price;
-    private long stock;
-
+    private long quantity;
+    @ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.EAGER)
+    private ArrayList<Cart> carts;
+    
     public Long getId() {
         return id;
     }
@@ -73,17 +82,73 @@ public class Item implements Serializable {
     }
 
     /**
-     * @return the stock
+     * @return the quantity
      */
-    public long getStock() {
-        return stock;
+    public long getQuantity() {
+        return quantity;
     }
 
     /**
-     * @param stock the stock to set
+     * @param quantity the quantity to set
      */
-    public void setStock(long stock) {
-        this.stock = stock;
+    public void setQuantity(long quantity) {
+        this.quantity = quantity;
+    }
+
+    /**
+     * @return the carts
+     */
+    public ArrayList<Cart> getCarts() {
+        return carts;
+    }
+
+    /**
+     * @param carts the carts to set
+     */
+    public void setCarts(ArrayList<Cart> carts) {
+        this.carts = carts;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * @return the category
+     */
+    public String getCategory() {
+        return category;
+    }
+
+    /**
+     * @param category the category to set
+     */
+    public void setCategory(String category) {
+        this.category = category;
     }
 
 }

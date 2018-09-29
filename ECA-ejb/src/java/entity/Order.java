@@ -6,10 +6,15 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -24,7 +29,11 @@ public class Order implements Serializable {
     private Long id;
     private String rating;
     private String review;
-    
+    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    private Cart cart;
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    private ArrayList<Item> items;
+
     public Long getId() {
         return id;
     }
@@ -85,5 +94,33 @@ public class Order implements Serializable {
     public void setReview(String review) {
         this.review = review;
     }
-    
+
+    /**
+     * @return the cart
+     */
+    public Cart getCart() {
+        return cart;
+    }
+
+    /**
+     * @param cart the cart to set
+     */
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
+    /**
+     * @return the items
+     */
+    public ArrayList<Item> getItems() {
+        return items;
+    }
+
+    /**
+     * @param items the items to set
+     */
+    public void setItems(ArrayList<Item> items) {
+        this.items = items;
+    }
+
 }

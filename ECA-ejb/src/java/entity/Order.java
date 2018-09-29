@@ -22,7 +22,9 @@ public class Order implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    private String rating;
+    private String review;
+    
     public Long getId() {
         return id;
     }
@@ -54,6 +56,34 @@ public class Order implements Serializable {
     @Override
     public String toString() {
         return "entity.Order[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the rating
+     */
+    public String getRating() {
+        return rating;
+    }
+
+    /**
+     * @param rating the rating to set
+     */
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    /**
+     * @return the review
+     */
+    public String getReview() {
+        return review;
+    }
+
+    /**
+     * @param review the review to set
+     */
+    public void setReview(String review) {
+        this.review = review;
     }
     
 }

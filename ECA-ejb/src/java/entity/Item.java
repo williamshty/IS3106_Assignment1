@@ -22,6 +22,8 @@ public class Item implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private float price;
+    private long stock;
 
     public Long getId() {
         return id;
@@ -55,5 +57,33 @@ public class Item implements Serializable {
     public String toString() {
         return "entity.Item[ id=" + id + " ]";
     }
-    
+
+    /**
+     * @return the price
+     */
+    public float getPrice() {
+        return price;
+    }
+
+    /**
+     * @param price the price to set
+     */
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    /**
+     * @return the stock
+     */
+    public long getStock() {
+        return stock;
+    }
+
+    /**
+     * @param stock the stock to set
+     */
+    public void setStock(long stock) {
+        this.stock = stock;
+    }
+
 }

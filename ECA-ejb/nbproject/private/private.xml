@@ -4,10 +4,8 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/Users/tianyuan.shi/NetBeansProjects/ECA/ECA-ejb/src/java/entity/Order.java</file>
-            <file>file:/Users/tianyuan.shi/NetBeansProjects/ECA/ECA-ejb/src/java/entity/Cart.java</file>
-            <file>file:/Users/tianyuan.shi/NetBeansProjects/ECA/ECA-ejb/src/java/entity/Admin.java</file>
-            <file>file:/Users/tianyuan.shi/NetBeansProjects/ECA/ECA-ejb/src/java/entity/Item.java</file>
-            <file>file:/Users/tianyuan.shi/NetBeansProjects/ECA/ECA-ejb/src/java/entity/User.java</file>
+            <file>file:/Users/tianyuan.shi/NetBeansProjects/ECA/ECA-ejb/src/java/session/ECASessionBean.java</file>
+            <file>file:/Users/tianyuan.shi/NetBeansProjects/ECA/ECA-ejb/src/java/session/ECASessionBeanLocal.java</file>
             <file>file:/Users/tianyuan.shi/NetBeansProjects/ECA/ECA-ejb/src/java/entity/Seller.java</file>
             <file>file:/Users/tianyuan.shi/NetBeansProjects/ECA/ECA-ejb/src/java/entity/Buyer.java</file>
         </group>

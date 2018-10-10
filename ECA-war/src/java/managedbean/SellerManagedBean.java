@@ -10,6 +10,7 @@ import entity.SaleOrder;
 import entity.Seller;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -92,7 +93,11 @@ public class SellerManagedBean implements Serializable{
         setItems(ecaSessionBeanLocal.viewAllSellerItems(getSeller().getId()));
     }
     public void loadSearchedItems(){
-        setItems((ArrayList<Item>) ecaSessionBeanLocal.viewSellerItems(getSeller().getId(), getSearchKeyword()));
+//        setItems(ecaSessionBeanLocal.viewSellerItems(getSeller().getId(), getSearchKeyword()));
+           List<Item> vectorItems = ecaSessionBeanLocal.viewSellerItems(getSeller().getId(), getSearchKeyword());
+           ArrayList<Item> arrayItems = new ArrayList<Item>();
+           arrayItems.addAll(vectorItems);
+           setItems(arrayItems);
     }
     
     

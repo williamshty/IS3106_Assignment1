@@ -10,6 +10,7 @@ import entity.Cart;
 import entity.Item;
 import entity.Order;
 import entity.Seller;
+import entity.Admin;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -29,7 +30,15 @@ public class ECASessionBean implements ECASessionBeanLocal {
     //Admin
     @Override
     public void adminLogin(String username, String password) {
-        
+        try{
+        Query q = em.createQuery("SELECT a from Admin a WHERE a.username=:username AND a.password=:password ");
+        q.setParameter("username", username);
+        q.setParameter("password", password);
+            System.out.print(q.getSingleResult());
+        }
+        catch(Exception e){
+        System.out.println(e);
+        }
     }
     
     @Override

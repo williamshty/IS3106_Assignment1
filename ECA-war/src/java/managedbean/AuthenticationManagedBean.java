@@ -6,9 +6,9 @@
 package managedbean;
 
 import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import javax.ejb.EJB;
+import javax.enterprise.context.ApplicationScoped;
 import session.ECASessionBeanLocal;
 
 /**
@@ -16,7 +16,7 @@ import session.ECASessionBeanLocal;
  * @author tianyuan.shi
  */
 @Named(value = "authenticationManagedBean")
-@SessionScoped
+@ApplicationScoped
 public class AuthenticationManagedBean implements Serializable {
 
     @EJB
@@ -35,6 +35,7 @@ public class AuthenticationManagedBean implements Serializable {
     public void login() {
         System.out.print(getUsername());
         System.out.print(getPassword());
+        ecaSessionBeanLocal.adminLogin(getUsername(), getPassword());
     }
 
     /**

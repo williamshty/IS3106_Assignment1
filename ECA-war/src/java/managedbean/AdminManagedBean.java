@@ -39,9 +39,12 @@ public class AdminManagedBean implements Serializable{
         setBuyers(ecaSessionBeanLocal.viewAllBuyers());
         System.out.print("Hello WOrld");
     }
-//    public AdminManagedBean() {
-//    }
-//    
+    public String login() {
+        System.out.print(getUsername());
+        System.out.print(getPassword());
+        ecaSessionBeanLocal.adminLogin(getUsername(), getPassword());
+        return "adminConsole.xhtml";
+    }
     public void deactivateSeller(long sellerID) {
         ecaSessionBeanLocal.deactivateSeller(sellerID);
         setSellers(ecaSessionBeanLocal.viewAllSellers());
@@ -87,5 +90,33 @@ public class AdminManagedBean implements Serializable{
      */
     public void setBuyers(List<Buyer> buyers) {
         this.buyers = buyers;
+    }
+
+    /**
+     * @return the username
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * @param username the username to set
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

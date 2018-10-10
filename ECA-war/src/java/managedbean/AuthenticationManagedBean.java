@@ -33,9 +33,14 @@ public class AuthenticationManagedBean implements Serializable {
     }
 
     public void login() {
+        try{
         System.out.print(getUsername());
         System.out.print(getPassword());
         ecaSessionBeanLocal.adminLogin(getUsername(), getPassword());
+        }
+        catch(Exception e){
+           System.out.print(e);
+        }
     }
 
     /**

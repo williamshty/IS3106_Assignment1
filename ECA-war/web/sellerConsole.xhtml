@@ -46,18 +46,18 @@
             <p:column headerText="Quantity">
                 <h:outputText value="#{item.quantity}" />
             </p:column>
-            <!--            <p:column headerText="Activate">
-                            <h:form>
-                            <h:commandButton value="Activate" action="#{adminManagedBean.activateSeller(seller.id)}">
-                            </h:commandButton>
-                                </h:form>
-                        </p:column>
-                        <p:column headerText="Deactivate">
-                            <h:form>
-                                <h:commandButton value="Deactivate" action="#{adminManagedBean.deactivateSeller(seller.id)}">
-                                </h:commandButton>
-                            </h:form>
-                        </p:column>-->
+            <p:column headerText="Edit">
+                <h:form>
+                    <h:commandButton value="Edit" action="#{sellerManagedBean.editItem(item)}">
+                    </h:commandButton>
+                </h:form>
+            </p:column>
+<!--            <p:column headerText="Delete">
+                <h:form>
+                    <h:commandButton value="Deactivate" action="#{adminManagedBean.deactivateSeller(seller.id)}">
+                    </h:commandButton>
+                </h:form>
+            </p:column>-->
         </p:dataTable>
     </ui:define>
 

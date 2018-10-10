@@ -40,6 +40,7 @@ public class SellerManagedBean implements Serializable{
     private float itemPrice;
     private long itemQuantity;
     private String searchKeyword;
+    private Item itemEdit;
     @EJB
     private ECASessionBeanLocal ecaSessionBeanLocal;
 
@@ -98,6 +99,31 @@ public class SellerManagedBean implements Serializable{
            ArrayList<Item> arrayItems = new ArrayList<Item>();
            arrayItems.addAll(vectorItems);
            setItems(arrayItems);
+    }
+    public String editItem(Item item){
+        setItemEdit(item);
+        setItemName(item.getName());
+        setItemDescription(item.getDescription());
+        setItemCategory(item.getCategory());
+        setItemPrice(item.getPrice());
+        setItemQuantity(item.getQuantity());
+        return "sellerEditItem.xhtml";
+    }
+    public String updateItem(){
+        Item item = getItemEdit();
+        item.setName(itemName);
+        item.setDescription(itemDescription);
+        item.setCategory(itemCategory);
+        item.setPrice(itemPrice);
+        item.setQuantity(itemQuantity);
+        setItemEdit(item);
+        setItemName("");
+        setItemDescription("");
+        setItemCategory("");
+        setItemPrice(0);
+        setItemQuantity(0);
+        ecaSessionBeanLocal.editItem(item);
+        return "sellerConsole.xhtml";
     }
     
     
@@ -326,6 +352,20 @@ public class SellerManagedBean implements Serializable{
      */
     public void setSearchKeyword(String searchKeyword) {
         this.searchKeyword = searchKeyword;
+    }
+
+    /**
+     * @return the itemEdit
+     */
+    public Item getItemEdit() {
+        return itemEdit;
+    }
+
+    /**
+     * @param itemEdit the itemEdit to set
+     */
+    public void setItemEdit(Item itemEdit) {
+        this.itemEdit = itemEdit;
     }
 
 }

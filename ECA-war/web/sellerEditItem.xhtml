@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./layout/default.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="left">
+        left
+    </ui:define>
+
+    <ui:define name="content">
+        <h:body>
+            <h:form>
+                <span class="profile_caption">Name: 
+                    <h:outputText value="#{sellerManagedBean.itemEdit.name}" />
+                </span>
+                <h:inputText value="#{sellerManagedBean.itemName}"/><br/>
+                <span class="profile_caption">Description: 
+                    <h:outputText value="#{sellerManagedBean.itemEdit.description}" />
+                </span>
+                <h:inputText value="#{sellerManagedBean.itemDescription}"/><br/>
+                <span class="profile_caption">Category: 
+                    <h:outputText value="#{sellerManagedBean.itemEdit.category}" />
+                </span>
+                <h:inputText value="#{sellerManagedBean.itemCategory}"/><br/>
+
+                <span class="profile_caption">Price: 
+                    <h:outputText value="#{sellerManagedBean.itemEdit.price}" />
+                </span>
+                <h:inputText value="#{sellerManagedBean.itemPrice}"/><br/>
+                <span class="profile_caption">Quantity:  
+                    <h:outputText value="#{sellerManagedBean.itemEdit.quantity}" />
+                </span>
+                <h:inputText value="#{sellerManagedBean.itemQuantity}"/><br/>
+                <h:commandButton class="login_button" value="Update" action="#{sellerManagedBean.updateItem()}"/>
+            </h:form>
+        </h:body>
+
+    </ui:define>
+
+</ui:composition>

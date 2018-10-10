@@ -32,6 +32,11 @@ public class SellerManagedBean implements Serializable{
     private boolean status;
     private ArrayList<SaleOrder> orders;
     private ArrayList<Item> items;
+    private String itemName;
+    private String itemDescription;
+    private String itemCategory;
+    private float itemPrice;
+    private long itemQuantity;
     @EJB
     private ECASessionBeanLocal ecaSessionBeanLocal;
 
@@ -43,26 +48,35 @@ public class SellerManagedBean implements Serializable{
     
     public void registerNewSeller(){
         Seller newSeller = new Seller();
-        newSeller.setGender(gender);
-        newSeller.setName(name);
-        newSeller.setUsername(username);
-        newSeller.setPassword(password);
+        newSeller.setGender(getGender());
+        newSeller.setName(getName());
+        newSeller.setUsername(getUsername());
+        newSeller.setPassword(getPassword());
         newSeller.setStatus(true);
-        newSeller = ecaSessionBeanLocal.registerSeller(newSeller);
+        newSeller = getEcaSessionBeanLocal().registerSeller(newSeller);
 //        newSeller.setCart(newCart);
 //        newCart.setSeller(newSeller);
     }
     public String login() {
         System.out.print(getUsername());
         System.out.print(getPassword());
-        setSeller(ecaSessionBeanLocal.sellerLogin(getUsername(), getPassword()));
+        setSeller(getEcaSessionBeanLocal().sellerLogin(getUsername(), getPassword()));
         return "sellerConsole.xhtml";
     }
     public void updateProfile(){
         Seller seller = getSeller();
-        seller.setName(name);
-        seller.setGender(gender);
-        ecaSessionBeanLocal.updateSellerProfile(seller);
+        seller.setName(getName());
+        seller.setGender(getGender());
+        getEcaSessionBeanLocal().updateSellerProfile(seller);
+    }
+    public void addItem(){
+        Item item = new Item();
+        item.setName(itemName);
+        item.setDescription(itemDescription);
+        item.setCategory(itemCategory);
+        item.setPrice(itemPrice);
+        item.setQuantity(itemQuantity);
+        ecaSessionBeanLocal.addItem(item, getSeller().getId());
     }
     
     
@@ -195,6 +209,90 @@ public class SellerManagedBean implements Serializable{
      */
     public void setItems(ArrayList<Item> items) {
         this.items = items;
+    }
+
+    /**
+     * @return the itemName
+     */
+    public String getItemName() {
+        return itemName;
+    }
+
+    /**
+     * @param itemName the itemName to set
+     */
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    /**
+     * @return the itemDescription
+     */
+    public String getItemDescription() {
+        return itemDescription;
+    }
+
+    /**
+     * @param itemDescription the itemDescription to set
+     */
+    public void setItemDescription(String itemDescription) {
+        this.itemDescription = itemDescription;
+    }
+
+    /**
+     * @return the itemCategory
+     */
+    public String getItemCategory() {
+        return itemCategory;
+    }
+
+    /**
+     * @param itemCategory the itemCategory to set
+     */
+    public void setItemCategory(String itemCategory) {
+        this.itemCategory = itemCategory;
+    }
+
+    /**
+     * @return the itemPrice
+     */
+    public float getItemPrice() {
+        return itemPrice;
+    }
+
+    /**
+     * @param itemPrice the itemPrice to set
+     */
+    public void setItemPrice(float itemPrice) {
+        this.itemPrice = itemPrice;
+    }
+
+    /**
+     * @return the itemQuantity
+     */
+    public long getItemQuantity() {
+        return itemQuantity;
+    }
+
+    /**
+     * @param itemQuantity the itemQuantity to set
+     */
+    public void setItemQuantity(long itemQuantity) {
+        this.itemQuantity = itemQuantity;
+    }
+
+    /**
+     * @return the ecaSessionBeanLocal
+     */
+    public ECASessionBeanLocal getEcaSessionBeanLocal() {
+        return ecaSessionBeanLocal;
+    }
+
+    /**
+     * @param ecaSessionBeanLocal the ecaSessionBeanLocal to set
+     */
+    public void setEcaSessionBeanLocal(ECASessionBeanLocal ecaSessionBeanLocal) {
+        this.ecaSessionBeanLocal = ecaSessionBeanLocal;
     }
 
 }

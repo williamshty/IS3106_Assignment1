@@ -9,12 +9,10 @@ import entity.Buyer;
 import entity.Seller;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.context.FacesContext;
 import session.ECASessionBeanLocal;
 
 /**

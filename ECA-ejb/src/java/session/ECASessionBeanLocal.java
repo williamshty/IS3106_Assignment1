@@ -6,6 +6,7 @@
 package session;
 
 import entity.Buyer;
+import entity.Cart;
 import entity.Item;
 import entity.SaleOrder;
 import entity.Seller;
@@ -51,7 +52,7 @@ public interface ECASessionBeanLocal {
 
     void updateSellerProfile(Seller seller);
 
-    void registerBuyer(String username, String password);
+    Buyer registerBuyer(Buyer buyer);
 
     void buyerLogin(String username, String password);
 
@@ -64,4 +65,10 @@ public interface ECASessionBeanLocal {
     void addFeedback(String rating, String review, long orderID);
     
     void updateBuyerProfile(Buyer buyer);
+
+    Buyer getBuyerByID(long buyerID);
+
+    Seller getSellerByID(long sellerID);
+
+    Cart createNewCart(Cart cart);
 }

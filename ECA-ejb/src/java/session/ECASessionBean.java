@@ -47,6 +47,7 @@ public class ECASessionBean implements ECASessionBeanLocal {
         return q.getResultList();
     }
     
+    
     @Override
     public List<Buyer> viewAllBuyers() {
         Query q = em.createQuery("SELECT b from Buyer b");
@@ -73,6 +74,8 @@ public class ECASessionBean implements ECASessionBeanLocal {
         seller.setStatus(true);
         em.merge(seller);
     }
+    
+    
     
     
     @Override
@@ -161,11 +164,23 @@ public class ECASessionBean implements ECASessionBeanLocal {
     }
     
     @Override
-    public void registerBuyer(String username, String password) {
+    public Buyer registerBuyer(Buyer buyer) {
+        em.persist(buyer);
+        em.flush();
+        return buyer;
     }
     
     @Override
     public void buyerLogin(String username, String password) {
+        try{
+        Query q = em.createQuery("SELECT b from Buyer b WHERE b.username=:username AND b.password=:password ");
+        q.setParameter("username", username);
+        q.setParameter("password", password);
+            System.out.print(q.getSingleResult());
+        }
+        catch(Exception e){
+        System.out.println(e);
+        }
     }
     
     @Override
@@ -206,4 +221,25 @@ public class ECASessionBean implements ECASessionBeanLocal {
             oldBuyer.setName(buyer.getName());
         }
     }
+
+    @Override
+    public Buyer getBuyerByID(long buyerID) {
+        Buyer buyer = em.find(Buyer.class, buyerID);
+        return buyer;
+    }
+
+    @Override
+    public Seller getSellerByID(long sellerID) {
+        Seller seller = em.find(Seller.class, sellerID);
+        return seller;
+    }
+
+    @Override
+    public Cart createNewCart(Cart cart) {
+        em.persist(cart);
+        em.flush();
+        return cart;
+    }
+    
+    
 }

@@ -58,6 +58,12 @@ public class SellerManagedBean implements Serializable{
         setSeller(ecaSessionBeanLocal.sellerLogin(getUsername(), getPassword()));
         return "sellerConsole.xhtml";
     }
+    public void updateProfile(){
+        Seller seller = getSeller();
+        seller.setName(name);
+        seller.setGender(gender);
+        ecaSessionBeanLocal.updateSellerProfile(seller);
+    }
     
     
     

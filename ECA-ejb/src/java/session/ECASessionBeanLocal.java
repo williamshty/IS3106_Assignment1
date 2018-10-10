@@ -71,7 +71,9 @@ public interface ECASessionBeanLocal {
 
     Seller getSellerByID(long sellerID);
 
-    Cart createNewCart(Cart cart);
+    void updateCart(Cart cart);
 
     ArrayList<Item> viewAllSellerItems(long sellerID);
+
+    List<Item> viewAllBuyerItems();
 }

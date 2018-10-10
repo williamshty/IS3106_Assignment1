@@ -7,7 +7,10 @@ package managedbean;
 
 import entity.Buyer;
 import entity.Cart;
+import entity.Item;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -18,9 +21,9 @@ import session.ECASessionBeanLocal;
  *
  * @author tianyuan.shi
  */
-@Named(value="buyerManagedBean")
+@Named(value = "buyerManagedBean")
 @SessionScoped
-public class BuyerManagedBean implements Serializable{
+public class BuyerManagedBean implements Serializable {
 
     /**
      * @return the buyer
@@ -42,6 +45,7 @@ public class BuyerManagedBean implements Serializable{
     private byte gender;
     private String name;
     private boolean status;
+    private ArrayList<Item> items;
     @EJB
     private ECASessionBeanLocal ecaSessionBeanLocal;
 
@@ -50,15 +54,14 @@ public class BuyerManagedBean implements Serializable{
      */
     @PostConstruct
     public void init() {
-//        setId(1L);
-//        getBuyerByID();
+        loadItems();
     }
-    
-    public void getBuyerByID(){
+
+    public void getBuyerByID() {
         this.setBuyer(ecaSessionBeanLocal.getBuyerByID(getId()));
     }
-    
-    public void registerNewBuyer(){
+
+    public void registerNewBuyer() {
         Buyer newBuyer = new Buyer();
         newBuyer.setGender(gender);
         newBuyer.setName(name);
@@ -73,23 +76,33 @@ public class BuyerManagedBean implements Serializable{
 //        newBuyer.setCart(newCart);
 //        newCart.setBuyer(newBuyer);
     }
+
     public String login() {
         System.out.print(getUsername());
         System.out.print(getPassword());
         setBuyer(ecaSessionBeanLocal.buyerLogin(getUsername(), getPassword()));
         return "buyerConsole.xhtml";
     }
-    public void updateProfile(){
+
+    public void updateProfile() {
         Buyer buyer = getBuyer();
         buyer.setName(name);
         buyer.setGender(gender);
         ecaSessionBeanLocal.updateBuyerProfile(buyer);
     }
+
+    public void loadItems() {
+        List<Item> vectorItems = ecaSessionBeanLocal.viewAllBuyerItems();
+        ArrayList<Item> arrayItems = new ArrayList<>();
+        arrayItems.addAll(vectorItems);
+        setItems(arrayItems);
+    }
     
-    
-    
-    
-    
+    public void addItem(Item item){
+        ArrayList<Item> cartItems =getBuyer().getCart().getItems();
+        cartItems.add(item);
+        getBuyer().getCart().setItems(cartItems);
+    }
 
     /**
      * @return the id
@@ -174,6 +187,19 @@ public class BuyerManagedBean implements Serializable{
     public void setStatus(boolean status) {
         this.status = status;
     }
-    
-   
+
+    /**
+     * @return the items
+     */
+    public ArrayList<Item> getItems() {
+        return items;
+    }
+
+    /**
+     * @param items the items to set
+     */
+    public void setItems(ArrayList<Item> items) {
+        this.items = items;
+    }
+
 }

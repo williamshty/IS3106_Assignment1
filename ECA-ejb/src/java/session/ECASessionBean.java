@@ -251,10 +251,9 @@ public class ECASessionBean implements ECASessionBeanLocal {
     }
 
     @Override
-    public Cart createNewCart(Cart cart) {
-        em.persist(cart);
+    public void updateCart(Cart cart) {
+        em.merge(cart);
         em.flush();
-        return cart;
     }
 
     @Override
@@ -263,6 +262,14 @@ public class ECASessionBean implements ECASessionBeanLocal {
         System.out.println(seller);
         return seller.getItems();
     }
+
+    @Override
+    public List<Item> viewAllBuyerItems() {
+        Query q = em.createQuery("SELECT i from Item i");
+        return q.getResultList();
+    }
+    
+    
     
     
 }

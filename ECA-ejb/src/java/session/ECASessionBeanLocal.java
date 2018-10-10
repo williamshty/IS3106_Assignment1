@@ -10,6 +10,7 @@ import entity.Cart;
 import entity.Item;
 import entity.SaleOrder;
 import entity.Seller;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -71,4 +72,6 @@ public interface ECASessionBeanLocal {
     Seller getSellerByID(long sellerID);
 
     Cart createNewCart(Cart cart);
+
+    ArrayList<Item> viewAllSellerItems(long sellerID);
 }

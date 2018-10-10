@@ -2,17 +2,63 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./layout/default.xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="left">
         left
     </ui:define>
 
     <ui:define name="content">
-        <h:body>
-            <h:outputText value="#{sellerManagedBean.getSeller().status}" />
-        </h:body>
+        <!--TO DO : Logout Button and Function-->
+        <h:form>
+            <h:commandButton value="Load Full List" action="#{sellerManagedBean.loadItems()}">
+            </h:commandButton>
+        </h:form>
+        <h:form>
+        <span class="login_caption">Keyword: </span><h:inputText value="#{sellerManagedBean.searchKeyword}"/><br/>
+        <h:commandButton value="Search" action="#{sellerManagedBean.loadSearchedItems()}">
+            </h:commandButton>
+        </h:form>
+        <h1>Items <h:outputText value="#{sellerManagedBean.getSeller().getName()}" /></h1>
+        <p:dataTable var="item" value="#{sellerManagedBean.getItems()}">
+            <p:column headerText="Id">
+                <h:outputText value="#{item.id}" />
+            </p:column>
 
+            <p:column headerText="Name">
+                <h:outputText value="#{item.name}" />
+            </p:column>
+
+            <p:column headerText="Description">
+                <h:outputText value="#{item.description}" />
+            </p:column>
+
+            <p:column headerText="Category">
+                <h:outputText value="#{item.category}" />
+            </p:column>
+
+            <p:column headerText="Price">
+                <h:outputText value="#{item.price}" />
+            </p:column>
+
+            <p:column headerText="Quantity">
+                <h:outputText value="#{item.quantity}" />
+            </p:column>
+            <!--            <p:column headerText="Activate">
+                            <h:form>
+                            <h:commandButton value="Activate" action="#{adminManagedBean.activateSeller(seller.id)}">
+                            </h:commandButton>
+                                </h:form>
+                        </p:column>
+                        <p:column headerText="Deactivate">
+                            <h:form>
+                                <h:commandButton value="Deactivate" action="#{adminManagedBean.deactivateSeller(seller.id)}">
+                                </h:commandButton>
+                            </h:form>
+                        </p:column>-->
+        </p:dataTable>
     </ui:define>
 
 </ui:composition>

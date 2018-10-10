@@ -10,6 +10,7 @@ import entity.SaleOrder;
 import entity.Seller;
 import java.io.Serializable;
 import java.util.ArrayList;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -37,13 +38,18 @@ public class SellerManagedBean implements Serializable{
     private String itemCategory;
     private float itemPrice;
     private long itemQuantity;
+    private String searchKeyword;
     @EJB
     private ECASessionBeanLocal ecaSessionBeanLocal;
 
     /**
      * Creates a new instance of SellerManagedBean
      */
-    public SellerManagedBean() {
+    @PostConstruct
+    public void init(){
+        if (getSeller()!=null){
+            loadItems();
+        }
     }
     
     public void registerNewSeller(){
@@ -54,6 +60,8 @@ public class SellerManagedBean implements Serializable{
         newSeller.setPassword(getPassword());
         newSeller.setStatus(true);
         newSeller = getEcaSessionBeanLocal().registerSeller(newSeller);
+        setSeller(newSeller);
+        loadItems();
 //        newSeller.setCart(newCart);
 //        newCart.setSeller(newSeller);
     }
@@ -61,6 +69,7 @@ public class SellerManagedBean implements Serializable{
         System.out.print(getUsername());
         System.out.print(getPassword());
         setSeller(getEcaSessionBeanLocal().sellerLogin(getUsername(), getPassword()));
+        loadItems();
         return "sellerConsole.xhtml";
     }
     public void updateProfile(){
@@ -79,7 +88,12 @@ public class SellerManagedBean implements Serializable{
         ecaSessionBeanLocal.addItem(item, getSeller().getId());
     }
     
-    
+    public void loadItems(){
+        setItems(ecaSessionBeanLocal.viewAllSellerItems(getSeller().getId()));
+    }
+    public void loadSearchedItems(){
+        setItems((ArrayList<Item>) ecaSessionBeanLocal.viewSellerItems(getSeller().getId(), getSearchKeyword()));
+    }
     
     
     
@@ -293,6 +307,20 @@ public class SellerManagedBean implements Serializable{
      */
     public void setEcaSessionBeanLocal(ECASessionBeanLocal ecaSessionBeanLocal) {
         this.ecaSessionBeanLocal = ecaSessionBeanLocal;
+    }
+
+    /**
+     * @return the searchKeyword
+     */
+    public String getSearchKeyword() {
+        return searchKeyword;
+    }
+
+    /**
+     * @param searchKeyword the searchKeyword to set
+     */
+    public void setSearchKeyword(String searchKeyword) {
+        this.searchKeyword = searchKeyword;
     }
 
 }

@@ -10,7 +10,7 @@ import entity.Cart;
 import entity.Item;
 import entity.SaleOrder;
 import entity.Seller;
-import entity.Admin;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -119,9 +119,12 @@ public class ECASessionBean implements ECASessionBeanLocal {
     
     @Override
     public List<Item> viewSellerItems(long sellerID, String keyword) {
+        System.out.println("session.ECASessionBean.viewSellerItems()");
         Seller seller = em.find(Seller.class, sellerID);
         Query q;
         if (keyword == "" || keyword == null) {
+            System.out.println("session.ECASessionBean.viewSellerItems()");
+            System.out.println( seller.getItems());
             return seller.getItems();
         } else {
             q = em.createQuery("SELECT i FROM Item i, Seller s WHERE i MEMBER OF s.items "
@@ -252,6 +255,13 @@ public class ECASessionBean implements ECASessionBeanLocal {
         em.persist(cart);
         em.flush();
         return cart;
+    }
+
+    @Override
+    public ArrayList<Item> viewAllSellerItems(long sellerID) {
+        Seller seller = em.find(Seller.class, sellerID);
+        System.out.println(seller);
+        return seller.getItems();
     }
     
     

@@ -25,7 +25,7 @@ public class Buyer implements Serializable{
 
     private static long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
     private String password;
@@ -33,7 +33,7 @@ public class Buyer implements Serializable{
     private String name;
     private boolean status;
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    private ArrayList<Order> orders;
+    private ArrayList<SaleOrder> orders;
     @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private Cart cart;
 
@@ -73,14 +73,14 @@ public class Buyer implements Serializable{
     /**
      * @return the orders
      */
-    public ArrayList<Order> getOrders() {
+    public ArrayList<SaleOrder> getOrders() {
         return orders;
     }
 
     /**
      * @param orders the orders to set
      */
-    public void setOrders(ArrayList<Order> orders) {
+    public void setOrders(ArrayList<SaleOrder> orders) {
         this.orders = orders;
     }
 

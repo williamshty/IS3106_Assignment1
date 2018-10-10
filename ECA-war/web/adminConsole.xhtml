@@ -2,14 +2,76 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./layout/default.xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="left">
         left
     </ui:define>
 
     <ui:define name="content">
-        
+        <!-- TODO: Finish Buyer-->
+        <h1>Seller</h1>
+        <p:dataTable var="seller" value="#{adminManagedBean.getSellers()}">
+            <p:column headerText="Id">
+                <h:outputText value="#{seller.id}" />
+            </p:column>
+
+            <p:column headerText="Name">
+                <h:outputText value="#{seller.name}" />
+            </p:column>
+
+            <p:column headerText="Gender">
+                <h:outputText value="#{seller.gender}" />
+            </p:column>
+
+            <p:column headerText="Status">
+                <h:outputText value="#{seller.status}" />
+            </p:column>
+            <p:column headerText="Activate">
+                <h:form>
+                <h:commandButton value="Activate" action="#{adminManagedBean.activateSeller(seller.id)}">
+                </h:commandButton>
+                    </h:form>
+            </p:column>
+            <p:column headerText="Deactivate">
+                <h:form>
+                    <h:commandButton value="Deactivate" action="#{adminManagedBean.deactivateSeller(seller.id)}">
+                    </h:commandButton>
+                </h:form>
+            </p:column>
+        </p:dataTable>
+        <h1>Buyer</h1>
+                <p:dataTable var="buyer" value="#{adminManagedBean.getBuyers()}">
+            <p:column headerText="Id">
+                <h:outputText value="#{buyer.id}" />
+            </p:column>
+
+            <p:column headerText="Name">
+                <h:outputText value="#{buyer.name}" />
+            </p:column>
+
+            <p:column headerText="Gender">
+                <h:outputText value="#{buyer.gender}" />
+            </p:column>
+
+            <p:column headerText="Status">
+                <h:outputText value="#{buyer.status}" />
+            </p:column>
+            <p:column headerText="Activate">
+                <h:form>
+                <h:commandButton value="Activate" action="#{adminManagedBean.activateBuyer(buyer.id)}">
+                </h:commandButton>
+                    </h:form>
+            </p:column>
+            <p:column headerText="Deactivate">
+                <h:form>
+                    <h:commandButton value="Deactivate" action="#{adminManagedBean.deactivateBuyer(buyer.id)}">
+                    </h:commandButton>
+                </h:form>
+            </p:column>
+        </p:dataTable>
     </ui:define>
 
 </ui:composition>

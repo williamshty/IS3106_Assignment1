@@ -8,7 +8,7 @@ package session;
 import entity.Buyer;
 import entity.Cart;
 import entity.Item;
-import entity.Order;
+import entity.SaleOrder;
 import entity.Seller;
 import entity.Admin;
 import java.util.List;
@@ -43,13 +43,13 @@ public class ECASessionBean implements ECASessionBeanLocal {
     
     @Override
     public List<Seller> viewAllSellers() {
-        Query q = em.createQuery("SELECT * from Seller");
+        Query q = em.createQuery("SELECT s from Seller s");
         return q.getResultList();
     }
     
     @Override
     public List<Buyer> viewAllBuyers() {
-        Query q = em.createQuery("SELECT * from Buyer");
+        Query q = em.createQuery("SELECT b from Buyer b");
         return q.getResultList();
     }
     
@@ -57,24 +57,29 @@ public class ECASessionBean implements ECASessionBeanLocal {
     public void deactivateSeller(long sellerID) {
         Seller seller = em.find(Seller.class, sellerID);
         seller.setStatus(false);
+        em.merge(seller);
     }
     
     @Override
     public void deactivateBuyer(long buyerID) {
         Buyer buyer = em.find(Buyer.class, buyerID);
         buyer.setStatus(false);
+        em.merge(buyer);
     }
     
     @Override
     public void activateSeller(long sellerID) {
         Seller seller = em.find(Seller.class, sellerID);
         seller.setStatus(true);
+        em.merge(seller);
     }
+    
     
     @Override
     public void activateBuyer(long buyerID) {
         Buyer buyer = em.find(Buyer.class, buyerID);
         buyer.setStatus(true);
+        em.merge(buyer);
     }
 
     //Seller
@@ -121,6 +126,7 @@ public class ECASessionBean implements ECASessionBeanLocal {
         }
     }
     
+    
     @Override
     public void editItem(Item item) {
         Item oldItem = em.find(Item.class, item.getId());
@@ -134,14 +140,14 @@ public class ECASessionBean implements ECASessionBeanLocal {
     }
     
     @Override
-    public List<Order> viewAllSellerOrders(long sellerID) {
+    public List<SaleOrder> viewAllSellerOrders(long sellerID) {
         Seller seller = em.find(Seller.class, sellerID);
         return seller.getOrders();
     }
     
     @Override
     public void updateOrderStatus(long orderID, String status) {
-        Order order = em.find(Order.class, orderID);
+        SaleOrder order = em.find(SaleOrder.class, orderID);
         order.setStatus(status);
     }
     
@@ -171,7 +177,7 @@ public class ECASessionBean implements ECASessionBeanLocal {
     @Override
     public void checkOutCart(long cartID) {
         Cart cart = em.find(Cart.class, cartID);
-        Order order = new Order();
+        SaleOrder order = new SaleOrder();
         order.setItems(cart.getItems());
         order.setBuyer(cart.getBuyer());
         em.persist(order);
@@ -179,14 +185,14 @@ public class ECASessionBean implements ECASessionBeanLocal {
     }
     
     @Override
-    public List<Order> viewAllBuyerOrders(long buyerID) {
+    public List<SaleOrder> viewAllBuyerOrders(long buyerID) {
         Buyer buyer = em.find(Buyer.class, buyerID);
         return buyer.getOrders();
     }
     
     @Override
     public void addFeedback(String rating, String review, long orderID) {
-        Order order = em.find(Order.class, orderID);
+        SaleOrder order = em.find(SaleOrder.class, orderID);
         if (order.getRating() == null && order.getReview() == null) {
             order.setRating(rating);
             order.setReview(review);

@@ -7,7 +7,7 @@ package session;
 
 import entity.Buyer;
 import entity.Item;
-import entity.Order;
+import entity.SaleOrder;
 import entity.Seller;
 import java.util.List;
 import javax.ejb.Local;
@@ -45,7 +45,7 @@ public interface ECASessionBeanLocal {
 
     void editItem(Item item);
 
-    List<Order> viewAllSellerOrders(long sellerID);
+    List<SaleOrder> viewAllSellerOrders(long sellerID);
 
     void updateOrderStatus(long orderID, String status);
 
@@ -59,7 +59,7 @@ public interface ECASessionBeanLocal {
 
     void checkOutCart(long cartID);
 
-    List<Order> viewAllBuyerOrders(long buyerID);
+    List<SaleOrder> viewAllBuyerOrders(long buyerID);
 
     void addFeedback(String rating, String review, long orderID);
     

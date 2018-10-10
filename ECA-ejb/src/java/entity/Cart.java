@@ -25,7 +25,7 @@ public class Cart implements Serializable {
 
     private static long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.EAGER)
     private ArrayList<Item> items;

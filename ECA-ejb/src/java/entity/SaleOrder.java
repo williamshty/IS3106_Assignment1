@@ -22,11 +22,11 @@ import javax.persistence.OneToOne;
  * @author tianyuan.shi
  */
 @Entity
-public class Order implements Serializable {
+public class SaleOrder implements Serializable {
 
     private static long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String rating;
     private String review;
@@ -35,6 +35,8 @@ public class Order implements Serializable {
     private Cart cart;
     @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private Buyer buyer;
+    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    private Seller seller;
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private ArrayList<Item> items;
 
@@ -56,10 +58,10 @@ public class Order implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Order)) {
+        if (!(object instanceof SaleOrder)) {
             return false;
         }
-        Order other = (Order) object;
+        SaleOrder other = (SaleOrder) object;
         if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -128,7 +130,7 @@ public class Order implements Serializable {
     }
 
     /**
-     * @return the serialVersionUID
+     * @return the serialVersionUID 
      */
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -167,6 +169,20 @@ public class Order implements Serializable {
      */
     public void setBuyer(Buyer buyer) {
         this.buyer = buyer;
+    }
+
+    /**
+     * @return the seller
+     */
+    public Seller getSeller() {
+        return seller;
+    }
+
+    /**
+     * @param seller the seller to set
+     */
+    public void setSeller(Seller seller) {
+        this.seller = seller;
     }
 
 }

@@ -24,7 +24,7 @@ public class Item implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String description;
@@ -34,7 +34,7 @@ public class Item implements Serializable {
     @ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.EAGER)
     private ArrayList<Cart> carts;
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    private ArrayList<Order> orders;
+    private ArrayList<SaleOrder> orders;
     public Long getId() {
         return id;
     }
@@ -155,14 +155,14 @@ public class Item implements Serializable {
     /**
      * @return the orders
      */
-    public ArrayList<Order> getOrders() {
+    public ArrayList<SaleOrder> getOrders() {
         return orders;
     }
 
     /**
      * @param orders the orders to set
      */
-    public void setOrders(ArrayList<Order> orders) {
+    public void setOrders(ArrayList<SaleOrder> orders) {
         this.orders = orders;
     }
 

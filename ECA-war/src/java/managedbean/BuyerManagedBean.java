@@ -21,6 +21,20 @@ import session.ECASessionBeanLocal;
 @Named(value="buyerManagedBean")
 @SessionScoped
 public class BuyerManagedBean implements Serializable{
+
+    /**
+     * @return the buyer
+     */
+    public Buyer getBuyer() {
+        return buyer;
+    }
+
+    /**
+     * @param buyer the buyer to set
+     */
+    public void setBuyer(Buyer buyer) {
+        this.buyer = buyer;
+    }
     private Buyer buyer;
     private Long id;
     private String username;
@@ -41,7 +55,7 @@ public class BuyerManagedBean implements Serializable{
     }
     
     public void getBuyerByID(){
-        this.buyer = ecaSessionBeanLocal.getBuyerByID(getId());
+        this.setBuyer(ecaSessionBeanLocal.getBuyerByID(getId()));
     }
     
     public void registerNewBuyer(){
@@ -62,8 +76,14 @@ public class BuyerManagedBean implements Serializable{
     public String login() {
         System.out.print(getUsername());
         System.out.print(getPassword());
-        ecaSessionBeanLocal.buyerLogin(getUsername(), getPassword());
+        setBuyer(ecaSessionBeanLocal.buyerLogin(getUsername(), getPassword()));
         return "buyerConsole.xhtml";
+    }
+    public void updateProfile(){
+        Buyer buyer = getBuyer();
+        buyer.setName(name);
+        buyer.setGender(gender);
+        ecaSessionBeanLocal.updateBuyerProfile(buyer);
     }
     
     

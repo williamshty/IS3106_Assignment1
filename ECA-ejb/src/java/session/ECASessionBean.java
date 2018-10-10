@@ -171,16 +171,17 @@ public class ECASessionBean implements ECASessionBeanLocal {
     }
     
     @Override
-    public void buyerLogin(String username, String password) {
+    public Buyer buyerLogin(String username, String password) {
         try{
         Query q = em.createQuery("SELECT b from Buyer b WHERE b.username=:username AND b.password=:password ");
         q.setParameter("username", username);
         q.setParameter("password", password);
-            System.out.print(q.getSingleResult());
+        return (Buyer) q.getSingleResult();
         }
         catch(Exception e){
         System.out.println(e);
         }
+        return null;
     }
     
     @Override

@@ -134,3 +134,13 @@ body{
     display: inline-block;
     font-size: 18px;    
 }
+
+.profile_caption{
+    width: 200px;
+    height: 30px;
+    text-align: left;
+    color:white;
+    position: relative;
+    display: inline-block;
+    font-size: 18px;    
+}

@@ -54,7 +54,7 @@ public interface ECASessionBeanLocal {
 
     Buyer registerBuyer(Buyer buyer);
 
-    void buyerLogin(String username, String password);
+    Buyer buyerLogin(String username, String password);
 
     void addItemToCart(long cartID, Item item);
 

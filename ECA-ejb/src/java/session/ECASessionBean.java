@@ -87,11 +87,23 @@ public class ECASessionBean implements ECASessionBeanLocal {
 
     //Seller
     @Override
-    public void registerSeller(String username, String password) {
+    public Seller registerSeller(Seller seller) {
+        em.persist(seller);
+        em.flush();
+        return seller;
     }
-    
     @Override
-    public void sellerLogin(String username, String password) {
+    public Seller sellerLogin(String username, String password) {
+        try{
+        Query q = em.createQuery("SELECT c from Seller c WHERE c.username=:username AND c.password=:password ");
+        q.setParameter("username", username);
+        q.setParameter("password", password);
+        return (Seller) q.getSingleResult();
+        }
+        catch(Exception e){
+        System.out.println(e);
+        }
+        return null;
     }
     
     @Override

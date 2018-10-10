@@ -1,12 +1,22 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
-</html>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./layout/default.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
 
+    <ui:define name="left">
+        left
+    </ui:define>
+
+    <ui:define name="content">
+        <h:body>
+            <h:form>
+                <span class="login_caption">Username: </span><h:inputText value="#{sellerManagedBean.username}"/><br/>
+                <span class="login_caption">Password: </span><h:inputSecret value="#{sellerManagedBean.password}"/><br/>
+                <h:commandButton class="login_button" value="Login" action="#{sellerManagedBean.login()}"/>
+            </h:form>
+        </h:body>
+
+    </ui:define>
+
+</ui:composition>

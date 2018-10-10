@@ -34,9 +34,9 @@ public interface ECASessionBeanLocal {
 
     void activateBuyer(long buyerID);
 
-    void registerSeller(String username, String password);
+    Seller registerSeller(Seller seller);
 
-    void sellerLogin(String username, String password);
+    Seller sellerLogin(String username, String password);
 
     void addItem(Item item, long sellerID);
 

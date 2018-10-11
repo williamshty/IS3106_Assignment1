@@ -63,7 +63,7 @@
             <p:column headerText="Quantity">
                 <h:outputText value="#{item.quantity}" />
             </p:column>
-            <p:column headerText="Add" rendered="#{buyerManagedBean.getBuyer()!=null}">
+            <p:column headerText="Add to Cart" rendered="#{buyerManagedBean.getBuyer()!=null}">
                 <h:form>
                     <h:commandButton value="Add" action="#{buyerManagedBean.addItem(item)}">
                     </h:commandButton>

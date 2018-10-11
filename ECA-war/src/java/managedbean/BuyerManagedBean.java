@@ -63,12 +63,12 @@ public class BuyerManagedBean implements Serializable {
         loadItems();
 //        loadOrders();
     }
-    
+
     public void getBuyerByID() {
         this.setBuyer(getEcaSessionBeanLocal().getBuyerByID(getId()));
     }
-    
-    public void registerNewBuyer() {
+
+    public String registerNewBuyer() {
         Buyer newBuyer = new Buyer();
         newBuyer.setGender(getGender());
         newBuyer.setName(getName());
@@ -78,40 +78,42 @@ public class BuyerManagedBean implements Serializable {
         Cart newCart = new Cart();
         newBuyer.setCart(newCart);
         newCart.setBuyer(newBuyer);
+
 //        newCart = ecaSessionBeanLocal.createNewCart(newCart);
         newBuyer = getEcaSessionBeanLocal().registerBuyer(newBuyer);
 //        newBuyer.setCart(newCart);
 //        newCart.setBuyer(newBuyer);
+        return "buyerLogin.xhtml";
     }
-    
+
     public String login() {
         System.out.print(getUsername());
         System.out.print(getPassword());
         setBuyer(getEcaSessionBeanLocal().buyerLogin(getUsername(), getPassword()));
         return "buyerConsole.xhtml";
     }
-    
+
     public void updateProfile() {
         Buyer buyer = getBuyer();
         buyer.setName(getName());
         buyer.setGender(getGender());
         getEcaSessionBeanLocal().updateBuyerProfile(buyer);
     }
-    
+
     public void loadItems() {
         List<Item> vectorItems = getEcaSessionBeanLocal().viewAllBuyerItems();
         ArrayList<Item> arrayItems = new ArrayList<>();
         arrayItems.addAll(vectorItems);
         setItems(arrayItems);
     }
-    
+
     public void loadOrders() {
         List<ItemOrder> vectorOrders = getEcaSessionBeanLocal().viewAllBuyerOrders(getBuyer().getId());
         ArrayList<ItemOrder> arrayOrders = new ArrayList<>();
         arrayOrders.addAll(vectorOrders);
         setOrders(arrayOrders);
     }
-    
+
     public void addItem(Item item) {
         ArrayList<Item> newCart = getCart();
         if (newCart != null) {
@@ -125,7 +127,7 @@ public class BuyerManagedBean implements Serializable {
             System.out.println(newCart);
         }
     }
-    
+
     public String checkoutCart() {
         if (!cart.isEmpty()) {
             for (Item item : getCart()) {
@@ -137,13 +139,13 @@ public class BuyerManagedBean implements Serializable {
         setCart(new ArrayList<>());
         return "buyerPayment.xhtml";
     }
-    
+
     public String addReviewStart(ItemOrder order) {
         setCurrentOrder(order);
         System.out.print(getCurrentOrder());
         return "buyerReview.xhtml";
     }
-    
+
     public String addReviewFinished() {
         System.out.println(rating);
         System.out.println(review);
@@ -338,12 +340,12 @@ public class BuyerManagedBean implements Serializable {
     public void setReview(String review) {
         this.review = review;
     }
-    
+
     public String logout() {
         setBuyer(null);
         setUsername("");
         setPassword("");
         return "buyerLogin.xhtml";
     }
-    
+
 }

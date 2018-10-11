@@ -6,6 +6,7 @@
 package managedbean;
 
 import entity.Item;
+import entity.ItemOrder;
 import entity.SaleOrder;
 import entity.Seller;
 import java.io.Serializable;
@@ -23,7 +24,7 @@ import session.ECASessionBeanLocal;
  */
 @Named(value = "sellerManagedBean")
 @SessionScoped
-public class SellerManagedBean implements Serializable{
+public class SellerManagedBean implements Serializable {
 
     private Seller seller;
     private Long id;
@@ -32,7 +33,6 @@ public class SellerManagedBean implements Serializable{
     private byte gender;
     private String name;
     private boolean status;
-    private ArrayList<SaleOrder> orders;
     private ArrayList<Item> items;
     private String itemName;
     private String itemDescription;
@@ -41,6 +41,9 @@ public class SellerManagedBean implements Serializable{
     private long itemQuantity;
     private String searchKeyword;
     private Item itemEdit;
+    private ArrayList<ItemOrder> orders;
+    private ItemOrder currentOrder;
+    private String orderStatus;
     @EJB
     private ECASessionBeanLocal ecaSessionBeanLocal;
 
@@ -48,13 +51,13 @@ public class SellerManagedBean implements Serializable{
      * Creates a new instance of SellerManagedBean
      */
     @PostConstruct
-    public void init(){
-        if (getSeller()!=null){
+    public void init() {
+        if (getSeller() != null) {
             loadItems();
         }
     }
-    
-    public void registerNewSeller(){
+
+    public String registerNewSeller() {
         Seller newSeller = new Seller();
         newSeller.setGender(getGender());
         newSeller.setName(getName());
@@ -64,9 +67,11 @@ public class SellerManagedBean implements Serializable{
         newSeller = getEcaSessionBeanLocal().registerSeller(newSeller);
         setSeller(newSeller);
         loadItems();
+        return "sellerLogin.xhtml";
 //        newSeller.setCart(newCart);
 //        newCart.setSeller(newSeller);
     }
+
     public String login() {
         System.out.print(getUsername());
         System.out.print(getPassword());
@@ -74,33 +79,37 @@ public class SellerManagedBean implements Serializable{
         loadItems();
         return "sellerConsole.xhtml";
     }
-    public void updateProfile(){
+
+    public void updateProfile() {
         Seller seller = getSeller();
         seller.setName(getName());
         seller.setGender(getGender());
         getEcaSessionBeanLocal().updateSellerProfile(seller);
     }
-    public void addItem(){
+
+    public void addItem() {
         Item item = new Item();
-        item.setName(itemName);
-        item.setDescription(itemDescription);
-        item.setCategory(itemCategory);
-        item.setPrice(itemPrice);
-        item.setQuantity(itemQuantity);
-        ecaSessionBeanLocal.addItem(item, getSeller().getId());
+        item.setName(getItemName());
+        item.setDescription(getItemDescription());
+        item.setCategory(getItemCategory());
+        item.setPrice(getItemPrice());
+        item.setQuantity(getItemQuantity());
+        getEcaSessionBeanLocal().addItem(item, getSeller().getId());
     }
-    
-    public void loadItems(){
-        setItems(ecaSessionBeanLocal.viewAllSellerItems(getSeller().getId()));
+
+    public void loadItems() {
+        setItems(getEcaSessionBeanLocal().viewAllSellerItems(getSeller().getId()));
     }
-    public void loadSearchedItems(){
+
+    public void loadSearchedItems() {
 //        setItems(ecaSessionBeanLocal.viewSellerItems(getSeller().getId(), getSearchKeyword()));
-           List<Item> vectorItems = ecaSessionBeanLocal.viewSellerItems(getSeller().getId(), getSearchKeyword());
-           ArrayList<Item> arrayItems = new ArrayList<Item>();
-           arrayItems.addAll(vectorItems);
-           setItems(arrayItems);
+        List<Item> vectorItems = getEcaSessionBeanLocal().viewSellerItems(getSeller().getId(), getSearchKeyword());
+        ArrayList<Item> arrayItems = new ArrayList<Item>();
+        arrayItems.addAll(vectorItems);
+        setItems(arrayItems);
     }
-    public String editItem(Item item){
+
+    public String editItem(Item item) {
         setItemEdit(item);
         setItemName(item.getName());
         setItemDescription(item.getDescription());
@@ -109,26 +118,43 @@ public class SellerManagedBean implements Serializable{
         setItemQuantity(item.getQuantity());
         return "sellerEditItem.xhtml";
     }
-    public String updateItem(){
+
+    public String updateItem() {
         Item item = getItemEdit();
-        item.setName(itemName);
-        item.setDescription(itemDescription);
-        item.setCategory(itemCategory);
-        item.setPrice(itemPrice);
-        item.setQuantity(itemQuantity);
+        item.setName(getItemName());
+        item.setDescription(getItemDescription());
+        item.setCategory(getItemCategory());
+        item.setPrice(getItemPrice());
+        item.setQuantity(getItemQuantity());
         setItemEdit(item);
         setItemName("");
         setItemDescription("");
         setItemCategory("");
         setItemPrice(0);
         setItemQuantity(0);
-        ecaSessionBeanLocal.editItem(item);
+        getEcaSessionBeanLocal().editItem(item);
         return "sellerConsole.xhtml";
     }
+
+    public void loadOrders() {
+        List<ItemOrder> vectorOrders = getEcaSessionBeanLocal().viewAllSellerOrders(getSeller().getId());
+        ArrayList<ItemOrder> arrayOrders = new ArrayList<>();
+        arrayOrders.addAll(vectorOrders);
+        setOrders(arrayOrders);
+    }
     
+    public String updateStatusStart(ItemOrder order){
+        setCurrentOrder(order);
+        return "sellerStatus.xhtml";
+    }
     
-    
-    
+    public String updateStatusFinished(){
+        getEcaSessionBeanLocal().updateOrderStatus(currentOrder.getId(), orderStatus);
+        loadOrders();
+        setCurrentOrder(null);
+        setOrderStatus("");
+        return "sellerOrders.xhtml";
+    }
 
     /**
      * @return the seller
@@ -231,14 +257,14 @@ public class SellerManagedBean implements Serializable{
     /**
      * @return the orders
      */
-    public ArrayList<SaleOrder> getOrders() {
+    public ArrayList<ItemOrder> getOrders() {
         return orders;
     }
 
     /**
      * @param orders the orders to set
      */
-    public void setOrders(ArrayList<SaleOrder> orders) {
+    public void setOrders(ArrayList<ItemOrder> orders) {
         this.orders = orders;
     }
 
@@ -368,4 +394,37 @@ public class SellerManagedBean implements Serializable{
         this.itemEdit = itemEdit;
     }
 
+    /**
+     * @return the currentOrder
+     */
+    public ItemOrder getCurrentOrder() {
+        return currentOrder;
+    }
+
+    /**
+     * @param currentOrder the currentOrder to set
+     */
+    public void setCurrentOrder(ItemOrder currentOrder) {
+        this.currentOrder = currentOrder;
+    }
+
+    /**
+     * @return the orderStatus
+     */
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    /**
+     * @param orderStatus the orderStatus to set
+     */
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+    public String logout() {
+        setSeller(null);
+        setUsername("");
+        setPassword("");
+        return "sellerLogin.xhtml";
+    }
 }

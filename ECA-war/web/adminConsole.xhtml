@@ -12,6 +12,10 @@
 
     <ui:define name="content">
         <!--TO DO : Logout Button and Function-->
+         <h:form>
+            <h:commandButton value="Log Out" action="#{adminManagedBean.logout()}">
+            </h:commandButton>
+        </h:form>
         <h1>Seller</h1>
         <p:dataTable var="seller" value="#{adminManagedBean.getSellers()}">
             <p:column headerText="Id">

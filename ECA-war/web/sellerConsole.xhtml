@@ -15,6 +15,12 @@
         <h:form>
             <h:commandButton value="Load Full List" action="#{sellerManagedBean.loadItems()}">
             </h:commandButton>
+            <a href="sellerProfile.xhtml">Edit Profile</a> / 
+            <a href="sellerOrders.xhtml">Orders</a> / 
+            <a href="sellerAddItem.xhtml">Add Item</a> / 
+            
+            <h:commandButton value="Log Out" action="#{sellerManagedBean.logout()}">
+            </h:commandButton>
         </h:form>
         <h:form>
         <span class="login_caption">Keyword: </span><h:inputText value="#{sellerManagedBean.searchKeyword}"/><br/>

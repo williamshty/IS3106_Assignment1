@@ -117,4 +117,9 @@ public class AdminManagedBean implements Serializable{
     public void setPassword(String password) {
         this.password = password;
     }
+    public String logout() {
+        setUsername("");
+        setPassword("");
+        return "adminLogin.xhtml";
+    }
 }

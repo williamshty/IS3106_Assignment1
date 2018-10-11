@@ -1,4 +1,4 @@
-/*
+    /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -52,6 +52,9 @@ public class BuyerManagedBean implements Serializable {
     private ItemOrder currentOrder;
     private String rating;
     private String review;
+    private String searchKeyword;
+    private String searchCategory;
+    private long searchQuantity;
     @EJB
     private ECASessionBeanLocal ecaSessionBeanLocal;
 
@@ -106,6 +109,31 @@ public class BuyerManagedBean implements Serializable {
         arrayItems.addAll(vectorItems);
         setItems(arrayItems);
     }
+    
+    public void loadKeywordSearchedItems(){
+        System.out.print(getSearchKeyword());
+        List<Item> vectorItems = getEcaSessionBeanLocal().searchItemByKeyword(searchKeyword);
+        ArrayList<Item> arrayItems = new ArrayList<>();
+        arrayItems.addAll(vectorItems);
+        setItems(arrayItems);
+        setSearchKeyword("");
+    }
+    public void loadCategorySearchedItems(){
+        System.out.print(getSearchCategory());
+        List<Item> vectorItems = getEcaSessionBeanLocal().searchItemByCategory(searchCategory);
+        ArrayList<Item> arrayItems = new ArrayList<>();
+        arrayItems.addAll(vectorItems);
+        setItems(arrayItems);
+        setSearchCategory("");
+    }
+    public void loadQuantitySearchedItems(){
+        System.out.print(getSearchQuantity());
+        List<Item> vectorItems = getEcaSessionBeanLocal().searchItemByAvailability(searchQuantity);
+        ArrayList<Item> arrayItems = new ArrayList<>();
+        arrayItems.addAll(vectorItems);
+        setItems(arrayItems);
+        setSearchQuantity(0);
+    }
 
     public void loadOrders() {
         List<ItemOrder> vectorOrders = getEcaSessionBeanLocal().viewAllBuyerOrders(getBuyer().getId());
@@ -147,13 +175,13 @@ public class BuyerManagedBean implements Serializable {
     }
 
     public String addReviewFinished() {
-        System.out.println(rating);
-        System.out.println(review);
+        System.out.println(getRating());
+        System.out.println(getReview());
 //        System.out.println(getCurrentOrder().getId());
 
-        getEcaSessionBeanLocal().addFeedback(rating, review, getCurrentOrder().getId());
-        getCurrentOrder().setRating(rating);
-        getCurrentOrder().setReview(review);
+        getEcaSessionBeanLocal().addFeedback(getRating(), getReview(), getCurrentOrder().getId());
+        getCurrentOrder().setRating(getRating());
+        getCurrentOrder().setReview(getReview());
         setRating("");
         setReview("");
         return "buyerOrders.xhtml";
@@ -346,6 +374,48 @@ public class BuyerManagedBean implements Serializable {
         setUsername("");
         setPassword("");
         return "buyerLogin.xhtml";
+    }
+
+    /**
+     * @return the searchKeyword
+     */
+    public String getSearchKeyword() {
+        return searchKeyword;
+    }
+
+    /**
+     * @param searchKeyword the searchKeyword to set
+     */
+    public void setSearchKeyword(String searchKeyword) {
+        this.searchKeyword = searchKeyword;
+    }
+
+    /**
+     * @return the searchCategory
+     */
+    public String getSearchCategory() {
+        return searchCategory;
+    }
+
+    /**
+     * @param searchCategory the searchCategory to set
+     */
+    public void setSearchCategory(String searchCategory) {
+        this.searchCategory = searchCategory;
+    }
+
+    /**
+     * @return the searchQuantity
+     */
+    public long getSearchQuantity() {
+        return searchQuantity;
+    }
+
+    /**
+     * @param searchQuantity the searchQuantity to set
+     */
+    public void setSearchQuantity(long searchQuantity) {
+        this.searchQuantity = searchQuantity;
     }
 
 }

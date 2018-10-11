@@ -24,6 +24,21 @@
         </h:form>
 
         <h1>Items</h1>
+        <h:form>
+        <span class="login_caption">Keyword: </span><h:inputText value="#{buyerManagedBean.searchKeyword}"/><br/>
+        <h:commandButton value="Search" action="#{buyerManagedBean.loadKeywordSearchedItems()}">
+            </h:commandButton>
+        </h:form>
+        <h:form>
+            <span class="login_caption">Category: </span><h:inputText value="#{buyerManagedBean.searchCategory}"/><br/>
+            <h:commandButton value="Search" action="#{buyerManagedBean.loadCategorySearchedItems()}">
+            </h:commandButton>
+        </h:form>
+        <h:form>
+            <span class="login_caption">Quantity Greater Than </span><h:inputText value="#{buyerManagedBean.searchQuantity}"/><br/>
+            <h:commandButton value="Search" action="#{buyerManagedBean.loadQuantitySearchedItems()}">
+            </h:commandButton>
+        </h:form>
         <p:dataTable var="item" value="#{buyerManagedBean.getItems()}">
             <p:column headerText="Id">
                 <h:outputText value="#{item.id}" />

@@ -79,4 +79,10 @@ public interface ECASessionBeanLocal {
     List<Item> viewAllBuyerItems();
 
     void createOrder(Item item, long sellerID, long buyerID);
+
+    List<Item> searchItemByKeyword(String keyword);
+
+    List<Item> searchItemByCategory(String category);
+
+    List<Item> searchItemByAvailability(long quantity);
 }

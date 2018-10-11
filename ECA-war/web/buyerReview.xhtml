@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./layout/default.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="left">
+        left
+    </ui:define>
+
+    <ui:define name="content">
+        <h:body>
+            <a href="buyerOrder.xhtml">Back</a> / 
+            <h:form>
+                <span class="profile_caption">Rating: 
+                </span>
+                <h:inputText value="#{buyerManagedBean.review}"/><br/>
+                <span class="profile_caption">Review:  
+                </span>
+                <h:inputText value="#{buyerManagedBean.rating}"/><br/>
+                <h:commandButton class="login_button" value="Post" action="#{buyerManagedBean.addReviewFinished()}"/>
+            </h:form>
+        </h:body>
+
+    </ui:define>
+
+</ui:composition>

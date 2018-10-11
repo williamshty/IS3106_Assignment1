@@ -1,12 +1,51 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
-</html>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./layout/default.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
+    <ui:define name="left">
+        left
+    </ui:define>
+
+    <ui:define name="content">
+        <!--TO DO : Logout Button and Function-->
+        <h:form>
+            <h:commandButton value="Load Full List" action="#{buyerManagedBean.loadOrders()}">
+            </h:commandButton>
+            <a href="buyerConsole.xhtml">Back</a> / 
+        </h:form>
+
+        <h1>Items</h1>
+        <p:dataTable var="order" value="#{buyerManagedBean.getOrders()}" rendered="#{buyerManagedBean.getBuyer()!=null}">
+            <p:column headerText="Id">
+                <h:outputText value="#{order.id}" />
+            </p:column>
+
+            <p:column headerText="Item ID">
+                <h:outputText value="#{order.itemId}" />
+            </p:column>
+
+            <p:column headerText="Status">
+                <h:outputText value="#{order.status}" />
+            </p:column>
+
+            <p:column headerText="Rating">
+                <h:outputText value="#{order.rating}" />
+            </p:column>
+
+            <p:column headerText="Review">
+                <h:outputText value="#{order.review}" />
+            </p:column>
+            <p:column headerText="Add Review" rendered="#{order.review==null}">
+                <h:form>
+                    <h:commandButton value="Add" action="#{buyerManagedBean.addReviewStart(order)}">
+                    </h:commandButton>
+                </h:form>
+            </p:column>
+        </p:dataTable>
+    </ui:define>
+
+</ui:composition>

@@ -226,9 +226,11 @@ public class ECASessionBean implements ECASessionBeanLocal {
     @Override
     public void addFeedback(String rating, String review, long orderID) {
         ItemOrder order = em.find(ItemOrder.class, orderID);
-        if (order.getRating() == null && order.getReview() == null) {
+        if (order!=null){
+            if (order.getRating() == null && order.getReview() == null) {
             order.setRating(rating);
             order.setReview(review);
+        }
         }
     }
     @Override
@@ -269,6 +271,7 @@ public class ECASessionBean implements ECASessionBeanLocal {
     public List<Item> viewAllBuyerItems() {
         Query q = em.createQuery("SELECT i from Item i");
         return q.getResultList();
+        
     }
 
     @Override
@@ -285,10 +288,6 @@ public class ECASessionBean implements ECASessionBeanLocal {
         em.merge(item);
         order.setItemId(item.getId());
     }
-    
-    
-    
-    
-    
+
     
 }

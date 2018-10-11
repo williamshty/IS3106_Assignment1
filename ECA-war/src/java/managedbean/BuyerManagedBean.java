@@ -8,6 +8,7 @@ package managedbean;
 import entity.Buyer;
 import entity.Cart;
 import entity.Item;
+import entity.ItemOrder;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,7 @@ public class BuyerManagedBean implements Serializable {
     private String name;
     private boolean status;
     private ArrayList<Item> items;
+    private ArrayList<Item> cart;
     @EJB
     private ECASessionBeanLocal ecaSessionBeanLocal;
 
@@ -97,11 +99,31 @@ public class BuyerManagedBean implements Serializable {
         arrayItems.addAll(vectorItems);
         setItems(arrayItems);
     }
+
+    public void addItem(Item item) {
+        ArrayList<Item> newCart = getCart();
+        if (newCart != null) {
+            newCart.add(item);
+            setCart(newCart);
+            System.out.println(newCart);
+        } else{
+            newCart = new ArrayList<Item>();
+            newCart.add(item);
+            setCart(newCart);
+            System.out.println(newCart);
+        }
+    }
     
-    public void addItem(Item item){
-        ArrayList<Item> cartItems =getBuyer().getCart().getItems();
-        cartItems.add(item);
-        getBuyer().getCart().setItems(cartItems);
+    public String checkoutCart(){
+        if(!cart.isEmpty()){
+            for(Item item: cart){
+                long sellerID = item.getSeller().getId();
+                long buyerID = getBuyer().getId();
+                ecaSessionBeanLocal.createOrder(item, sellerID, buyerID);
+            }
+        }
+        cart = new ArrayList<>();
+        return"buyerPayment.xhtml";
     }
 
     /**
@@ -200,6 +222,20 @@ public class BuyerManagedBean implements Serializable {
      */
     public void setItems(ArrayList<Item> items) {
         this.items = items;
+    }
+
+    /**
+     * @return the cart
+     */
+    public ArrayList<Item> getCart() {
+        return cart;
+    }
+
+    /**
+     * @param cart the cart to set
+     */
+    public void setCart(ArrayList<Item> cart) {
+        this.cart = cart;
     }
 
 }

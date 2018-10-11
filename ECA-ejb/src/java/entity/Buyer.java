@@ -33,7 +33,9 @@ public class Buyer implements Serializable{
     private String name;
     private boolean status;
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    private ArrayList<SaleOrder> orders;
+    private ArrayList<SaleOrder> saleOrders;
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    private ArrayList<ItemOrder> orders;
     @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private Cart cart;
 
@@ -71,17 +73,17 @@ public class Buyer implements Serializable{
     }
 
     /**
-     * @return the orders
+     * @return the saleOrders
      */
-    public ArrayList<SaleOrder> getOrders() {
-        return orders;
+    public ArrayList<SaleOrder> getSaleOrders() {
+        return saleOrders;
     }
 
     /**
-     * @param orders the orders to set
+     * @param saleOrders the saleOrders to set
      */
-    public void setOrders(ArrayList<SaleOrder> orders) {
-        this.orders = orders;
+    public void setSaleOrders(ArrayList<SaleOrder> saleOrders) {
+        this.saleOrders = saleOrders;
     }
 
     /**
@@ -180,6 +182,20 @@ public class Buyer implements Serializable{
      */
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    /**
+     * @return the orders
+     */
+    public ArrayList<ItemOrder> getOrders() {
+        return orders;
+    }
+
+    /**
+     * @param orders the orders to set
+     */
+    public void setOrders(ArrayList<ItemOrder> orders) {
+        this.orders = orders;
     }
 
 }

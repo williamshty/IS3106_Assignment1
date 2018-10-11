@@ -8,6 +8,7 @@ package session;
 import entity.Buyer;
 import entity.Cart;
 import entity.Item;
+import entity.ItemOrder;
 import entity.SaleOrder;
 import entity.Seller;
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public interface ECASessionBeanLocal {
 
     void editItem(Item item);
 
-    List<SaleOrder> viewAllSellerOrders(long sellerID);
+    List<ItemOrder> viewAllSellerOrders(long sellerID);
 
     void updateOrderStatus(long orderID, String status);
 
@@ -61,7 +62,7 @@ public interface ECASessionBeanLocal {
 
     void checkOutCart(long cartID);
 
-    List<SaleOrder> viewAllBuyerOrders(long buyerID);
+    List<ItemOrder> viewAllBuyerOrders(long buyerID);
 
     void addFeedback(String rating, String review, long orderID);
     
@@ -76,4 +77,6 @@ public interface ECASessionBeanLocal {
     ArrayList<Item> viewAllSellerItems(long sellerID);
 
     List<Item> viewAllBuyerItems();
+
+    void createOrder(Item item, long sellerID, long buyerID);
 }

@@ -14,6 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -22,7 +24,7 @@ import javax.persistence.ManyToMany;
 @Entity
 public class Item implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -31,10 +33,13 @@ public class Item implements Serializable {
     private String category;
     private float price;
     private long quantity;
-    @ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.EAGER)
-    private ArrayList<Cart> carts;
+    
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    private ArrayList<ItemOrder> orders;
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    private ArrayList<SaleOrder> orders;
+    private ArrayList<SaleOrder> saleOrders;
+    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    private Seller seller;
     public Long getId() {
         return id;
     }
@@ -46,7 +51,7 @@ public class Item implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (getId() != null ? getId().hashCode() : 0);
         return hash;
     }
 
@@ -57,7 +62,7 @@ public class Item implements Serializable {
             return false;
         }
         Item other = (Item) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -65,7 +70,7 @@ public class Item implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Item[ id=" + id + " ]";
+        return "entity.Item[ id=" + getId() + " ]";
     }
 
     /**
@@ -94,20 +99,6 @@ public class Item implements Serializable {
      */
     public void setQuantity(long quantity) {
         this.quantity = quantity;
-    }
-
-    /**
-     * @return the carts
-     */
-    public ArrayList<Cart> getCarts() {
-        return carts;
-    }
-
-    /**
-     * @param carts the carts to set
-     */
-    public void setCarts(ArrayList<Cart> carts) {
-        this.carts = carts;
     }
 
     /**
@@ -153,16 +144,58 @@ public class Item implements Serializable {
     }
 
     /**
+     * @return the saleOrders
+     */
+    public ArrayList<SaleOrder> getSaleOrders() {
+        return saleOrders;
+    }
+
+    /**
+     * @param saleOrders the saleOrders to set
+     */
+    public void setSaleOrders(ArrayList<SaleOrder> saleOrders) {
+        this.saleOrders = saleOrders;
+    }
+
+    /**
+     * @return the serialVersionUID
+     */
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    /**
+     * @param aSerialVersionUID the serialVersionUID to set
+     */
+    public static void setSerialVersionUID(long aSerialVersionUID) {
+        serialVersionUID = aSerialVersionUID;
+    }
+
+    /**
+     * @return the seller
+     */
+    public Seller getSeller() {
+        return seller;
+    }
+
+    /**
+     * @param seller the seller to set
+     */
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
+
+    /**
      * @return the orders
      */
-    public ArrayList<SaleOrder> getOrders() {
+    public ArrayList<ItemOrder> getOrders() {
         return orders;
     }
 
     /**
      * @param orders the orders to set
      */
-    public void setOrders(ArrayList<SaleOrder> orders) {
+    public void setOrders(ArrayList<ItemOrder> orders) {
         this.orders = orders;
     }
 

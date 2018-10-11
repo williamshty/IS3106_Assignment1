@@ -8,6 +8,7 @@ package session;
 import entity.Buyer;
 import entity.Cart;
 import entity.Item;
+import entity.ItemOrder;
 import entity.SaleOrder;
 import entity.Seller;
 import java.util.ArrayList;
@@ -111,6 +112,7 @@ public class ECASessionBean implements ECASessionBeanLocal {
         Seller seller = em.find(Seller.class, sellerID);
         if (seller != null) {
             if (!seller.getItems().contains(item)) {
+                item.setSeller(seller);
                 em.persist(item);
                 seller.getItems().add(item);
             }
@@ -139,7 +141,7 @@ public class ECASessionBean implements ECASessionBeanLocal {
     @Override
     public void deleteItem(long itemID) {
         Item item = em.find(Item.class, itemID);
-        if (item.getOrders() == null) {
+        if (item.getSaleOrders() == null) {
             item.setQuantity(0);
         }
     }
@@ -158,14 +160,14 @@ public class ECASessionBean implements ECASessionBeanLocal {
     }
     
     @Override
-    public List<SaleOrder> viewAllSellerOrders(long sellerID) {
+    public List<ItemOrder> viewAllSellerOrders(long sellerID) {
         Seller seller = em.find(Seller.class, sellerID);
         return seller.getOrders();
     }
     
     @Override
     public void updateOrderStatus(long orderID, String status) {
-        SaleOrder order = em.find(SaleOrder.class, orderID);
+        ItemOrder order = em.find(ItemOrder.class, orderID);
         order.setStatus(status);
     }
     
@@ -207,23 +209,23 @@ public class ECASessionBean implements ECASessionBeanLocal {
     
     @Override
     public void checkOutCart(long cartID) {
-        Cart cart = em.find(Cart.class, cartID);
-        SaleOrder order = new SaleOrder();
-        order.setItems(cart.getItems());
-        order.setBuyer(cart.getBuyer());
-        em.persist(order);
-        cart.setItems(null);
+//        Cart cart = em.find(Cart.class, cartID);
+//        ItemOrder order = new ItemOrder();
+//        order.setItems(cart.getItems());
+//        order.setBuyer(cart.getBuyer());
+//        em.persist(order);
+//        cart.setItems(null);
     }
     
     @Override
-    public List<SaleOrder> viewAllBuyerOrders(long buyerID) {
+    public List<ItemOrder> viewAllBuyerOrders(long buyerID) {
         Buyer buyer = em.find(Buyer.class, buyerID);
         return buyer.getOrders();
     }
     
     @Override
     public void addFeedback(String rating, String review, long orderID) {
-        SaleOrder order = em.find(SaleOrder.class, orderID);
+        ItemOrder order = em.find(ItemOrder.class, orderID);
         if (order.getRating() == null && order.getReview() == null) {
             order.setRating(rating);
             order.setReview(review);
@@ -252,8 +254,8 @@ public class ECASessionBean implements ECASessionBeanLocal {
 
     @Override
     public void updateCart(Cart cart) {
-        em.merge(cart);
-        em.flush();
+        Cart oldCart = em.find(Cart.class, cart.getId());
+        oldCart.setItems(cart.getItems());
     }
 
     @Override
@@ -268,6 +270,23 @@ public class ECASessionBean implements ECASessionBeanLocal {
         Query q = em.createQuery("SELECT i from Item i");
         return q.getResultList();
     }
+
+    @Override
+    public void createOrder(Item item, long sellerID, long buyerID) {
+        Seller seller = em.find(Seller.class, sellerID);
+        Buyer buyer = em.find(Buyer.class, buyerID);
+        ItemOrder order = new ItemOrder();
+        em.persist(order);
+//        order.setItem(item);
+        buyer.getOrders().add(order);
+        seller.getOrders().add(order);
+        item.getOrders().add(order);
+        item.setQuantity(item.getQuantity()-1);
+        em.merge(item);
+        order.setItemId(item.getId());
+    }
+    
+    
     
     
     

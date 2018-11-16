@@ -85,4 +85,10 @@ public interface ECASessionBeanLocal {
     List<Item> searchItemByCategory(String category);
 
     List<Item> searchItemByAvailability(long quantity);
+
+    Seller findSellerByID(long sID);
+    
+    Buyer findBuyerByID(long bID);
+
+    Item findItemByID(long iID);
 }

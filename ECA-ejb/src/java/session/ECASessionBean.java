@@ -98,8 +98,9 @@ public class ECASessionBean implements ECASessionBeanLocal {
             return (Seller) q.getSingleResult();
         } catch (Exception e) {
             System.out.println(e);
+            return null;
         }
-        return null;
+
     }
 
     @Override
@@ -136,7 +137,7 @@ public class ECASessionBean implements ECASessionBeanLocal {
     @Override
     public void deleteItem(long itemID) {
         Item item = em.find(Item.class, itemID);
-        if (item.getSaleOrders() == null) {
+        if (item.getOrders() == null || item.getOrders().size() == 0) {
             item.setQuantity(0);
         }
     }
@@ -156,7 +157,16 @@ public class ECASessionBean implements ECASessionBeanLocal {
     @Override
     public List<ItemOrder> viewAllSellerOrders(long sellerID) {
         Seller seller = em.find(Seller.class, sellerID);
-        return seller.getOrders();
+        List<Item> items = seller.getItems();
+        List<ItemOrder> orders = new ArrayList<ItemOrder>();
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getOrders() != null) {
+                for (int j = 0; j < items.get(i).getOrders().size(); j++) {
+                    orders.add(items.get(i).getOrders().get(j));
+                }
+            }
+        }
+        return orders;
     }
 
     @Override
@@ -307,6 +317,24 @@ public class ECASessionBean implements ECASessionBeanLocal {
         q.setParameter("quantity", quantity);
 
         return q.getResultList();
+    }
+
+    @Override
+    public Seller findSellerByID(long sID) {
+        Seller s = em.find(Seller.class, sID);
+        return s;
+    }
+
+    @Override
+    public Buyer findBuyerByID(long bID) {
+        Buyer s = em.find(Buyer.class, bID);
+        return s;
+    }
+
+    @Override
+    public Item findItemByID(long iID) {
+        Item i = em.find(Item.class, iID);
+        return i;
     }
 
 }

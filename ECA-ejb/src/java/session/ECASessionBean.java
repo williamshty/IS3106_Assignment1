@@ -285,6 +285,7 @@ public class ECASessionBean implements ECASessionBeanLocal {
         ItemOrder order = new ItemOrder();
         em.persist(order);
 //        order.setItem(item);
+        order.setStatus("payment confirmed");
         buyer.getOrders().add(order);
         seller.getOrders().add(order);
         item.getOrders().add(order);

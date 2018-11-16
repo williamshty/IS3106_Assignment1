@@ -10,6 +10,7 @@ import entity.Buyer;
 import entity.Item;
 import entity.ItemOrder;
 import entity.Seller;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.json.Json;
@@ -191,7 +192,7 @@ public class EcaResource {
             return Response.status(404).entity(exception).build();
         } else {
             Seller newSeller = new Seller();
-            
+
             newSeller.setGender(result.getGender());
             newSeller.setStatus(result.isStatus());
             newSeller.setUsername(result.getUsername());
@@ -203,7 +204,7 @@ public class EcaResource {
             ).build();
         }
     }
-    
+
     @Path("/seller/item/add/{id}")
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
@@ -241,7 +242,7 @@ public class EcaResource {
             return Response.status(404).entity(exception).build();
         }
     }
-    
+
     @Path("/seller/item/edit")
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
@@ -258,7 +259,7 @@ public class EcaResource {
             return Response.status(404).entity(exception).build();
         }
     }
-    
+
     @Path("/seller/item/delete/{id}")
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
@@ -299,11 +300,12 @@ public class EcaResource {
         ).build();
 
     }
+
     @Path("/seller/item/search/{id}/{key}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchSellerItem(@PathParam("id") Long sID, @PathParam("key") String key) {
-        List<Item> results = getEcaSessionBeanLocal().viewSellerItems(sID,key);
+        List<Item> results = getEcaSessionBeanLocal().viewSellerItems(sID, key);
         for (int i = 0; i < results.size(); i++) {
             Item newItem = new Item();
             newItem.setCategory(results.get(i).getCategory());
@@ -324,12 +326,12 @@ public class EcaResource {
         ).build();
 
     }
-    
+
     @Path("/seller/order/edit/{id}/{status}")
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response sellerEditOrder(@PathParam("id") Long oID,@PathParam("status") String status) {
+    public Response sellerEditOrder(@PathParam("id") Long oID, @PathParam("status") String status) {
         try {
             ecaSessionBeanLocal.updateOrderStatus(oID, status);
             return Response.status(204).build();
@@ -341,7 +343,7 @@ public class EcaResource {
             return Response.status(404).entity(exception).build();
         }
     }
-    
+
     @Path("/seller/order/all/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -356,9 +358,7 @@ public class EcaResource {
         ).build();
 
     }
-    
-    
-    
+
     @Path("/buyer/register")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -385,7 +385,7 @@ public class EcaResource {
             return Response.status(404).entity(exception).build();
         } else {
             Buyer newBuyer = new Buyer();
-            
+
             newBuyer.setGender(result.getGender());
             newBuyer.setStatus(result.isStatus());
             newBuyer.setUsername(result.getUsername());
@@ -397,6 +397,7 @@ public class EcaResource {
             ).build();
         }
     }
+
     @Path("/buyer/profile/{id}/{name}/{gender}")
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
@@ -415,6 +416,108 @@ public class EcaResource {
 
             return Response.status(404).entity(exception).build();
         }
+    }
+
+    @Path("/buyer/item/all")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllItem() {
+        List<Item> results = getEcaSessionBeanLocal().viewAllBuyerItems();
+        for (int i = 0; i < results.size(); i++) {
+            Item newItem = new Item();
+            newItem.setCategory(results.get(i).getCategory());
+            newItem.setDescription(results.get(i).getDescription());
+            newItem.setName(results.get(i).getName());
+            newItem.setPrice(results.get(i).getPrice());
+            newItem.setQuantity(results.get(i).getQuantity());
+            newItem.setOrders(results.get(i).getOrders());
+            newItem.setId(results.get(i).getId());
+            results.set(i, newItem);
+        }
+        GenericEntity<List<Item>> entity
+                = new GenericEntity<List<Item>>(results) {
+        };
+
+        return Response.status(200).entity(
+                entity
+        ).build();
+
+    }
+
+    @Path("/buyer/item/search/{type}/{key}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response searchBuyerItem(@PathParam("type") String type, @PathParam("key") String key) {
+
+        List<Item> results = new ArrayList<Item>();
+        switch (type) {
+            case "keyword":
+                results = getEcaSessionBeanLocal().searchItemByKeyword(key);
+                break;
+            case "category":
+                results = getEcaSessionBeanLocal().searchItemByCategory(key);
+                break;
+
+            case "quantity":
+                Long numKey = Long.valueOf(key);
+                results = getEcaSessionBeanLocal().searchItemByAvailability(numKey);
+                break;
+        }
+
+        if (results != null) {
+            for (int i = 0; i < results.size(); i++) {
+                Item newItem = new Item();
+                newItem.setCategory(results.get(i).getCategory());
+                newItem.setDescription(results.get(i).getDescription());
+                newItem.setName(results.get(i).getName());
+                newItem.setPrice(results.get(i).getPrice());
+                newItem.setQuantity(results.get(i).getQuantity());
+                newItem.setOrders(results.get(i).getOrders());
+                newItem.setId(results.get(i).getId());
+                results.set(i, newItem);
+            }
+        }
+        GenericEntity<List<Item>> entity
+                = new GenericEntity<List<Item>>(results) {
+        };
+
+        return Response.status(200).entity(
+                entity
+        ).build();
+
+    }
+    
+    @Path("/buyer/order/create/{itemID}/{sellerID}/{buyerID}")
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createOrder(@PathParam("itemID") Long iID, @PathParam("sellerID") Long sID, @PathParam("buyerID") Long bID) {
+        try {
+            Item i = ecaSessionBeanLocal.findItemByID(iID);
+            ecaSessionBeanLocal.createOrder(i, sID, bID);
+            return Response.status(204).build();
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found")
+                    .build();
+
+            return Response.status(404).entity(exception).build();
+        }
+    }
+    
+    @Path("/buyer/order/all/{id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllBuyerOrder(@PathParam("id") Long bID) {
+        List<ItemOrder> results = getEcaSessionBeanLocal().viewAllBuyerOrders(bID);
+        GenericEntity<List<ItemOrder>> entity
+                = new GenericEntity<List<ItemOrder>>(results) {
+        };
+
+        return Response.status(200).entity(
+                entity
+        ).build();
+
     }
 
     /**

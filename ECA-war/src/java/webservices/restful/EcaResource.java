@@ -226,7 +226,6 @@ public class EcaResource {
     @Path("/seller/profile/{id}/{name}/{gender}")
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response sellerEditProfile(@PathParam("id") Long sID, @PathParam("name") String name, @PathParam("gender") byte gender) {
         try {
             Seller s = ecaSessionBeanLocal.getSellerByID(sID);
@@ -330,7 +329,7 @@ public class EcaResource {
     @Path("/seller/order/edit/{id}/{status}")
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
+
     public Response sellerEditOrder(@PathParam("id") Long oID, @PathParam("status") String status) {
         try {
             ecaSessionBeanLocal.updateOrderStatus(oID, status);
@@ -401,7 +400,6 @@ public class EcaResource {
     @Path("/buyer/profile/{id}/{name}/{gender}")
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response buyerEditProfile(@PathParam("id") Long bID, @PathParam("name") String name, @PathParam("gender") byte gender) {
         try {
             Buyer b = ecaSessionBeanLocal.getBuyerByID(bID);
@@ -430,7 +428,9 @@ public class EcaResource {
             newItem.setName(results.get(i).getName());
             newItem.setPrice(results.get(i).getPrice());
             newItem.setQuantity(results.get(i).getQuantity());
-            newItem.setOrders(results.get(i).getOrders());
+            Seller newSeller = new Seller();
+            newSeller.setId(results.get(i).getSeller().getId());
+            newItem.setSeller(newSeller);
             newItem.setId(results.get(i).getId());
             results.set(i, newItem);
         }
@@ -472,7 +472,9 @@ public class EcaResource {
                 newItem.setName(results.get(i).getName());
                 newItem.setPrice(results.get(i).getPrice());
                 newItem.setQuantity(results.get(i).getQuantity());
-                newItem.setOrders(results.get(i).getOrders());
+                Seller newSeller = new Seller();
+                newSeller.setId(results.get(i).getSeller().getId());
+                newItem.setSeller(newSeller);
                 newItem.setId(results.get(i).getId());
                 results.set(i, newItem);
             }
@@ -487,10 +489,26 @@ public class EcaResource {
 
     }
     
+    @Path("/buyer/order/edit/{orderID}/{rating}/{review}")
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response buyerEditOrder(@PathParam("orderID") Long oID, @PathParam("rating") String rating, @PathParam("review") String review) {
+        try {
+            ecaSessionBeanLocal.addFeedback(rating, review, oID);
+            return Response.status(204).build();
+        } catch (Exception e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found")
+                    .build();
+
+            return Response.status(404).entity(exception).build();
+        }
+    }
+
+
     @Path("/buyer/order/create/{itemID}/{sellerID}/{buyerID}")
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response createOrder(@PathParam("itemID") Long iID, @PathParam("sellerID") Long sID, @PathParam("buyerID") Long bID) {
         try {
             Item i = ecaSessionBeanLocal.findItemByID(iID);
@@ -504,7 +522,7 @@ public class EcaResource {
             return Response.status(404).entity(exception).build();
         }
     }
-    
+
     @Path("/buyer/order/all/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
